@@ -1,5 +1,6 @@
 <template>
 	<view class="content">
+		<!-- 吸顶内容 -->
 		<u-sticky>
 			<view class="sticky">
 				<view class="left-group">
@@ -19,6 +20,7 @@
 				</view>
 			</view>
 		</u-sticky>
+		<!-- billList -->
 		<bills :billList="billList" :removeYearAndMonth="true"></bills>
 	</view>
 </template>
@@ -37,7 +39,7 @@
 					year: true,
 					month: true
 				},
-				date: '',
+				date: ''
 			}
 		},
 		components: {
@@ -50,17 +52,26 @@
 			uni.startPullDownRefresh();
 		},
 		onPullDownRefresh() {
-			this.loadBills(this.year, this.month);
+			this.loadBills();
+		},
+		onReachBottom() {
+			this.loadBills(this.billList.length)
 		},
 		methods: {
-			loadBills(year, month) {
+			loadBills(start = 0) {
 				wx.cloud.callFunction({
 					name: 'getBillsByDate',
 					data: {
-						date: this.date
+						date: this.date,
+						start
 					}
 				}).then(res => {
-					this.billList = res.result;
+					const list = res.result;
+					if (start == 0) {
+						this.billList = list;
+					} else {
+						this.billList.push(...list);
+					}
 					uni.stopPullDownRefresh();
 				});
 			},
@@ -133,7 +144,7 @@
 				display: flex;
 
 				.month {
-					color: rgb(255, 255, 255);
+					color: #FFFFFF;
 					font-size: 50rpx;
 				}
 			}
@@ -141,7 +152,7 @@
 
 		.right-group {
 			flex: 1;
-			color: rgb(255, 255, 255);
+			color: #FFFFFF;
 			font-size: 45rpx;
 
 			.top-group {

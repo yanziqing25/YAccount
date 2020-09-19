@@ -13,11 +13,12 @@ function getDays(year, month) {
 }
 
 exports.main = async (event, context) => {
-  let date = new Date(event.date);
-  let year = date.getFullYear();
-  let month = date.getMonth();
-  let date1 = new Date(year, month, 1);
-  let date2 = new Date(year, month, getDays(year, month + 1), 23, 59, 59, 999);
+  const start = event.start;
+  const date = new Date(event.date);
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const date1 = new Date(year, month, 1);
+  const date2 = new Date(year, month, getDays(year, month + 1), 23, 59, 59, 999);
 
   const result = await db.collection('bill').aggregate().match({
     userOpenid: _.eq(event.userInfo.openId),
@@ -31,15 +32,14 @@ exports.main = async (event, context) => {
       _id: '$_id',
       type: '$type',
       icon: '$icon',
+      iconType: '$iconType',
       name: '$name',
       count: '$count',
       create_time: '$create_time'
     })
-  }).end();
-  // 手动排序
-  const list = result.list;
-  list.sort((a, b) => {
-    return b._id.date - a._id.date;
-  });
-  return list;
+  }).sort({
+    _id: -1
+  }).skip(start).limit(5).end();
+
+  return result.list;
 }

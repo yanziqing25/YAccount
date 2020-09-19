@@ -15,7 +15,4 @@
 
 <style lang="scss">
 	@import "uview-ui/index.scss";
-	page {
-		// background-color: $u-bg-color;
-	}
 </style>

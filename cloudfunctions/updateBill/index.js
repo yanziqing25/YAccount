@@ -6,6 +6,7 @@ exports.main = async (event, context) => {
   const _id = event._id;
   const type = event.type;
   const icon = event.icon;
+  let iconType;
   const name = event.name;
   // 传入的date是String类型，需转为Date类型
   let count = Number(event.count);
@@ -14,22 +15,27 @@ exports.main = async (event, context) => {
   if ((type == 'expenditure' && count > 0) || (type == 'income' && count < 0)) {
     count = -count;
   }
-  
+
   const result = await db.collection('bill').doc(_id).get();
   const oldIcon = result.data.icon;
+  const oldIconType = result.data.iconType;
   if (oldIcon != icon) {
-    // 删除旧的icon
-    const fileList = [];
-    fileList.push(oldIcon);
-    cloud.deleteFile({
-      fileList
-    });
+    iconType = 'customized';
+    if (oldIconType == 'customized') {
+      // 删除旧的icon
+      const fileList = [];
+      fileList.push(oldIcon);
+      cloud.deleteFile({
+        fileList
+      });
+    }
   }
   // 更新bill
   return await db.collection('bill').doc(_id).update({
     data: {
       type,
       icon,
+      iconType,
       name,
       count,
       date

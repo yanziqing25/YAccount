@@ -25,12 +25,13 @@ function getCloudPath(fileName) {
 	return 'bills/' + year + '/' + month + '/' + day + '/' + getUUID() + '.' + getExt(fileName);
 }
 
-async function deleteBill(_id, icon) {
+async function deleteBill(_id, icon, iconType) {
 	return await wx.cloud.callFunction({
 		name: 'deleteBill',
 		data: {
 			_id,
-			icon
+			icon,
+			iconType
 		}
 	});
 }

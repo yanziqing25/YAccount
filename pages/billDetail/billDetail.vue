@@ -46,7 +46,7 @@
 				},
 				_id: '',
 				type: '',
-				name: '',
+				iconType: '',
 				create_time: '',
 				form: {
 					type: '',
@@ -108,6 +108,7 @@
 		onLoad(event) {
 			this._id = event._id;
 			this.create_time = event.create_time;
+			this.iconType = event.iconType;
 			this.form.type = event.type;
 			this.form.icon = event.icon;
 			if (event.type == 'expenditure') this.type = '支出';
@@ -219,8 +220,8 @@
 			},
 			deleteBill() {
 				this.loading2 = true;
-				this.$deleteBill(this._id, this.form.icon).then(res => {
-					if (res.result.db.stats.removed == 1 && res.result.file.fileList[0].status == 0) {
+				this.$deleteBill(this._id, this.form.icon, this.iconType).then(res => {
+					if (res.result.stats.removed == 1) {
 						wx.showToast({
 							title: '删除成功！',
 						});

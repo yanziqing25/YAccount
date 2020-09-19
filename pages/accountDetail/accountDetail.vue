@@ -24,7 +24,9 @@
 </template>
 
 <script>
-	import { mapState } from 'vuex'
+	import {
+		mapState
+	} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -65,6 +67,7 @@
 						disable: true
 					},
 				],
+				name: '',
 				type: '',
 				show: false,
 				loading: false
@@ -72,7 +75,8 @@
 		},
 		onLoad(event) {
 			this.form.type = event.type;
-			this.form.name = event.name;
+			this.name = event.name;
+			this.form.name = this.name;
 			if (event.type == 'expenditure') {
 				this.type = '支出'
 				this.radioList[0].disable = false;
@@ -100,35 +104,28 @@
 							return;
 						}
 						this.loading = true;
-						// 上传图片
-						wx.cloud.uploadFile({
-							filePath: '/static/icon/' + this.form.type + '/' + this.form.name + '.png',
-							cloudPath: this.$getCloudPath('.png')
+						wx.cloud.callFunction({
+							name: 'submitBill',
+							data: {
+								icon: 'cloud://yanziqing25-p4o7v.7961-yanziqing25-p4o7v-1302721867/icon/' + this.form.type + '/' + this.name + '.png',
+								iconType: 'system',
+								...this.form
+							}
 						}).then(res => {
-							const fileID = res.fileID;
-							// 提交
-							wx.cloud.callFunction({
-								name: 'submitBill',
-								data: {
-									icon: fileID,
-									...this.form
-								}
-							}).then(res => {
-								this.loading = false;
-								if (res.result._id) {
-									wx.showToast({
-										title: '成功记录一笔！',
-									});
-									setTimeout(() => {
-										wx.navigateBack();
-									}, 1200);
-								} else {
-									wx.showToast({
-										title: res.result.errMsg,
-										icon: 'none'
-									});
-								}
-							});
+							this.loading = false;
+							if (res.result._id) {
+								wx.showToast({
+									title: '成功记录一笔！',
+								});
+								setTimeout(() => {
+									wx.navigateBack();
+								}, 1200);
+							} else {
+								wx.showToast({
+									title: res.result.errMsg,
+									icon: 'none'
+								});
+							}
 						});
 					}
 				});

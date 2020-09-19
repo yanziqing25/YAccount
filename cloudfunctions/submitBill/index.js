@@ -5,6 +5,7 @@ const db = cloud.database()
 exports.main = async (event, context) => {
   const type = event.type;
   const icon = event.icon;
+  const iconType = event.iconType;
   const name = event.name;
   // 传入的date是String类型，需转为Date类型
   let count = Number(event.count);
@@ -18,6 +19,7 @@ exports.main = async (event, context) => {
     data: {
       type,
       icon,
+      iconType,
       name,
       count,
       date,

@@ -21,12 +21,23 @@
 		onPullDownRefresh() {
 			this.loadBills();
 		},
+		onReachBottom() {
+			this.loadBills(this.billList.length)
+		},
 		methods: {
-			loadBills() {
+			loadBills(start = 0) {
 				wx.cloud.callFunction({
-					name: 'getBills'
+					name: 'getBills',
+					data: {
+						start
+					}
 				}).then(res => {
-					this.billList = res.result;
+					const list = res.result;
+					if (start == 0) {
+						this.billList = list;
+					} else {
+						this.billList.push(...list);
+					}
 					uni.stopPullDownRefresh();
 				});
 			},

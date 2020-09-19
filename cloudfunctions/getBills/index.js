@@ -5,6 +5,7 @@ const _ = db.command
 const $ = _.aggregate
 
 exports.main = async (event, context) => {
+  const start = event.start;
   const result = await db.collection('bill').aggregate().match({
     userOpenid: _.eq(event.userInfo.openId)
   }).group({
@@ -16,15 +17,14 @@ exports.main = async (event, context) => {
       _id: '$_id',
       type: '$type',
       icon: '$icon',
+      iconType: '$iconType',
       name: '$name',
       count: '$count',
       create_time: '$create_time'
     })
-  }).end();
-  // 手动排序
-  const list = result.list;
-  list.sort((a, b) => {
-    return b._id.date - a._id.date;
-  });
-  return list;
+  }).sort({
+    _id: -1
+  }).skip(start).limit(5).end();
+
+  return result.list;
 }

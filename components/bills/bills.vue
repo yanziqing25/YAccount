@@ -5,8 +5,8 @@
 				<view class="date">{{item._id.date | timeFilter({removeYearAndMonth: removeYearAndMonth})}}</view>
 				<view class="count">金额: {{item.count}}</view>
 			</view>
-			<u-swipe-action vibrate-short :options="options" v-for="info in item.bills" :key="info._id" @click="onClickOption(info._id.toString(), info.icon.toString())">
-				<view class="bill-group" @click="onClickBill(info._id, info.type, info.icon, info.name, info.count, item._id.date, info.create_time)">
+			<u-swipe-action vibrate-short :options="options" v-for="info in item.bills" :key="info._id" @click="onClickOption(info._id.toString(), info.icon.toString(), info.iconType.toString())">
+				<view class="bill-group" @click="onClickBill(info._id, info.type, info.icon, info.iconType, info.name, info.count, item._id.date, info.create_time)">
 					<u-image class="icon" :src="info.icon" width="64" height="64" shape="circle"></u-image>
 					<view class="info-group">
 						<view class="name">{{info.name}}</view>
@@ -41,15 +41,15 @@
 			};
 		},
 		methods: {
-			onClickBill(_id, type, icon, name, count, date, create_time) {
+			onClickBill(_id, type, icon, iconType, name, count, date, create_time) {
 				wx.navigateTo({
-					url: '../../pages/billDetail/billDetail?_id=' + _id + '&type=' + type + '&icon=' + icon + '&name=' + name +
+					url: '../../pages/billDetail/billDetail?_id=' + _id + '&type=' + type + '&icon=' + icon + '&iconType=' + iconType + '&name=' + name +
 						'&count=' + count + '&date=' + date + '&create_time=' + create_time
 				});
 			},
-			onClickOption(_id, icon) {
-				this.$deleteBill(_id, icon).then(res => {
-					if (res.result.db.stats.removed == 1 && res.result.file.fileList[0].status == 0) uni.startPullDownRefresh();
+			onClickOption(_id, icon, iconType) {
+				this.$deleteBill(_id, icon, iconType).then(res => {
+					if (res.result.stats.removed == 1) uni.startPullDownRefresh();
 					else wx.showToast({
 						title: '删除失败！'
 					});

@@ -2,8 +2,7 @@
 	"easycom": {
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	},
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
+	"pages": [{
 			"path": "pages/index/index",
 			"style": {
 				"enablePullDownRefresh": true
@@ -13,10 +12,10 @@
 			"path": "pages/account/account"
 		},
 		{
-		    "path" : "pages/bills/bills",
-		    "style": {
-		    	"enablePullDownRefresh": true
-		    }
+			"path": "pages/bills/bills",
+			"style": {
+				"enablePullDownRefresh": true
+			}
 		},
 		{
 			"path": "pages/mine/mine"
@@ -37,7 +36,7 @@
 				"navigationBarBackgroundColor": "#000000"
 			}
 		}
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "YAccount-您的记账小助手",
@@ -45,6 +44,8 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
+		"color": "#909399",
+		"selectedColor": "#000000",
 		"list": [{
 				"iconPath": "static/icon/index.png",
 				"selectedIconPath": "static/icon/index_selected.png",

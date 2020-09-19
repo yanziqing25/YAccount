@@ -12,9 +12,7 @@
 		</u-sticky>
 
 		<u-cell-group title="我的记账">
-			<u-cell-item icon="calendar" title="记账天数" hover-class="none" :arrow="false">5</u-cell-item>
 			<u-cell-item icon="order" title="记账笔数" hover-class="none" :arrow="false">{{userInfo.billCount}}</u-cell-item>
-			<u-cell-item icon="integral-fill" title="会员等级" value="新版本"></u-cell-item>
 		</u-cell-group>
 	</view>
 </template>
@@ -92,10 +90,10 @@
 	}
 
 	.one-word {
-		min-height: 80rpx;
+		min-height: 100rpx;
 		display: flex;
 		justify-content: center;
-		color: rgb(255, 255, 255);
+		color: #FFFFFF;
 		margin: 0 120rpx;
 	}
 

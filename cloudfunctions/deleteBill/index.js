@@ -3,12 +3,13 @@ cloud.init()
 const db = cloud.database()
 
 exports.main = async (event, context) => {
-  const fileList = [];
-  fileList.push(event.icon);
-  return {
-    file: await cloud.deleteFile({
+  if(event.iconType == 'customized') {
+    const fileList = [];
+    fileList.push(event.icon);
+    cloud.deleteFile({
       fileList
-    }),
-    db: await db.collection('bill').doc(event._id).remove()
+    });
   }
+  
+  return await db.collection('bill').doc(event._id).remove();
 }
